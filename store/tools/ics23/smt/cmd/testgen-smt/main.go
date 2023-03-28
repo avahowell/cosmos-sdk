@@ -1,13 +1,12 @@
 package main
 
 import (
-	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"os"
 
-	ics23 "github.com/confio/ics23/go"
+	ics23 "github.com/cosmos/ics23/go"
 
 	tmproofs "github.com/cosmos/cosmos-sdk/store/internal/proofs"
 	tools "github.com/cosmos/cosmos-sdk/store/tools/ics23"
@@ -114,10 +113,9 @@ func doSingle(exist bool, loc tmproofs.Where, size int) error {
 		return fmt.Errorf("protobuf marshal: %w", err)
 	}
 
-	path := sha256.Sum256(key)
 	res := map[string]interface{}{
 		"root":  hex.EncodeToString(root),
-		"key":   hex.EncodeToString(path[:]),
+		"key":   hex.EncodeToString(key),
 		"value": hex.EncodeToString(value),
 		"proof": hex.EncodeToString(binary),
 	}
@@ -164,9 +162,8 @@ func doBatch(size, exist, nonexist int) error {
 			return fmt.Errorf("create proof: %w", err)
 		}
 		proofs = append(proofs, proof)
-		path := sha256.Sum256(key)
 		item := item{
-			Key:   hex.EncodeToString(path[:]),
+			Key:   hex.EncodeToString(key),
 			Value: hex.EncodeToString(value),
 		}
 		items = append(items, item)
@@ -180,9 +177,8 @@ func doBatch(size, exist, nonexist int) error {
 			return fmt.Errorf("create proof: %w", err)
 		}
 		proofs = append(proofs, proof)
-		path := sha256.Sum256(key)
 		item := item{
-			Key: hex.EncodeToString(path[:]),
+			Key: hex.EncodeToString(key),
 		}
 		items = append(items, item)
 	}

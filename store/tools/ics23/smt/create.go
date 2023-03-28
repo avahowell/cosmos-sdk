@@ -4,7 +4,7 @@ import (
 	"crypto/sha256"
 	"fmt"
 
-	ics23 "github.com/confio/ics23/go"
+	ics23 "github.com/cosmos/ics23/go"
 	"github.com/lazyledger/smt"
 )
 
@@ -53,7 +53,7 @@ func createExistenceProof(tree *smt.SparseMerkleTree, key []byte) (*ics23.Existe
 	}
 	path := sha256.Sum256(key)
 	return &ics23.ExistenceProof{
-		Key:   path[:],
+		Key:   key,
 		Value: value,
 		Leaf:  ics23.SmtSpec.LeafSpec,
 		Path:  convertInnerOps(path[:], proof.SideNodes),
